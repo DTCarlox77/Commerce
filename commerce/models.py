@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
-url_imagen = 'https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png'
-
 class CustomUser(AbstractUser):
 
     def __str__(self):
@@ -16,14 +14,20 @@ class Subasta(models.Model):
         ('Electrónica', 'Electrónica'),
         ('Hogar', 'Hogar'),
         ('Colección', 'Colección'),
-        ('Videojuegos', 'Videojuegos')
+        ('Videojuegos', 'Videojuegos'),
+        ('Tecnología', 'Tecnología'),
+        ('Cocina', 'Cocina'),
+        ('Decoración', 'Decoración'),
+        ('Medicina', 'Medicina'),
+        ('Accesorios', 'Accesorios')
     ]
 
     producto = models.CharField(max_length=40, null=False)
     descripcion = models.TextField()
     categoria = models.CharField(max_length=30, choices=categorias)
-    imagen = models.CharField(max_length=256, default=url_imagen)
+    imagen = models.CharField(max_length=256)
     precio_inicial = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.5)])
+    precio_venta = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     vendedor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='usuario_vendedor')
     fecha = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True)

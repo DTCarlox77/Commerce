@@ -23,6 +23,7 @@ def auctions(request):
         busqueda = request.POST.get('search')
         
         if busqueda:
+            # Muestra todos los productos.
             productos = Subasta.objects.filter(producto__icontains=busqueda).order_by('-fecha')
     
     return render(request, 'auctions.html', {
@@ -82,6 +83,8 @@ def product(request, id):
                     nueva_oferta = Oferta(usuario=request.user, producto=producto, oferta=oferta)
                     nueva_oferta.save()
                     mensaje = ('Tu oferta se ha agregado exitosamente', 0)
+                    producto.precio_venta = oferta
+                    producto.save()
                     
                     # Actualización de las variables de oferta.
                     ofertas_usuario = Oferta.objects.filter(producto=producto, usuario=request.user)
@@ -136,6 +139,9 @@ def new_product(request):
         categoria = request.POST.get('categoria')
         imagen = request.POST.get('imagen')
         precio_inicial = request.POST.get('precio_inicial')
+        
+        if not imagen:
+            imagen = 'https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png'
         
         respaldo = {
             'producto' : producto,
