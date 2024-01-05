@@ -9,19 +9,20 @@
     <div class="container cuerpo">
 
         <div class="card">
-            <img src="https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.slideshow-xlarge_2x.jpg"
+            <img src="{{ producto.imagen }}"
                 class="card-img-top" alt="...">
             <div class="card-body">
-                <p class="card-text text-primary">Tecnología</p>
-                <h5 class="card-title">MacBook Pro</h5>
-                <p class="card-text">La MacBook Pro da un salto al futuro con los chips M3, M3 Pro y M3 Max.
-                    Fabricados con tecnología de 3 nanómetros y una nueva arquitectura de GPU, son los chips más
-                    avanzados que existen en una computadora personal. Y cada uno de estos pequeños gigantes lleva
-                    la potencia y el rendimiento a niveles inimaginables.</p>
-                <p class="card-text"><small class="text-body">Ofrecida por: Apple</small></p>
-                <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 1200.00</small></p>
+                <p class="card-text text-primary">{{ producto.categoria }}</p>
+                <h5 class="card-title">{{ producto.producto }}</h5>
+                <p class="card-text">{{ producto.descripcion }}</p>
+                <p class="card-text"><small class="text-body">Ofrecido por: {{ producto.vendedor }}</small></p>
+                <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ {{ producto.precio_inicial }}</small></p>
 
-                <button class="btn btn-outline-primary">Agregar a lista de seguimiento</button>
+                {% if user == producto.vendedor %}
+                    <button class="btn btn-outline-warning">Cerrar audición</button>
+                {% else %}
+                    <button class="btn btn-outline-primary">Agregar a lista de seguimiento</button>
+                {% endif %}
             </div>
         </div>
 

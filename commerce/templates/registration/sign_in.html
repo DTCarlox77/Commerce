@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}Iniciar sesión{% endblock  %}
+{% block title %}Registro{% endblock  %}
 
 {% block content %}
 
@@ -8,13 +8,15 @@
 
     <div class="card col-12">
         <div class="card-body m-4">
-            <h4>Iniciar sesión</h4>
+            <h4>Registro</h4>
             <br>
 
-            <form action="{% url 'login' %}" method="POST">
+            <form action="{% url 'sign_in' %}" method="POST">
 
                 {% csrf_token %}
+                    
                 <h6 class="text-danger">{% if mensaje %}{{ mensaje }}{% endif %}</h6>
+                    
                 <div class="row g-3 pb-2">
                     <div class="col">
                         <input name="username" type="text" class="form-control" placeholder="Nombre de usuario"
@@ -28,8 +30,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-outline-primary">Iniciar sesión</button>
-                <p class="text mt-2 m-0">¿No tienes una cuenta? <a class="text" href="{% url 'sign_in' %}">Regístrate</a></p>
+                <button type="submit" class="btn btn-outline-primary">Crear cuenta</button>
+                <p class="text mt-2 m-0">¿Ya tienes una cuenta? <a class="text" href="{% url 'login' %}">Inicia sesión</a></p>
 
             </form>
 

@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 
 url_imagen = 'https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png'
-prf_imagen = 'https://srcwap.com/wp-content/uploads/2022/08/abstract-user-flat-4.png'
 
 class CustomUser(AbstractUser):
 
@@ -23,10 +23,10 @@ class Subasta(models.Model):
     descripcion = models.TextField()
     categoria = models.CharField(max_length=30, choices=categorias)
     imagen = models.CharField(max_length=256, default=url_imagen)
-    precio_inicial = models.DecimalField(max_digits=10, decimal_places=2)
+    precio_inicial = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.5)])
     vendedor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='usuario_vendedor')
     fecha = models.DateTimeField(auto_now_add=True)
-    activo = models.BooleanField()
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.producto} subido por {self.vendedor}'
@@ -38,7 +38,7 @@ class Comentario(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.usuario} ha hecho un comentario en {self.producto}'
+        return f'{self.usuario} ha hecho un comentario en {self.id} - {self.producto}'
 
 class Oferta(models.Model):
     usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='usuario_oferta')

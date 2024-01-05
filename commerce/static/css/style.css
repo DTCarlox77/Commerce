@@ -79,3 +79,9 @@ footer {
     overflow-y: auto;
 }
 
+.nothing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

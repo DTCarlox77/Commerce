@@ -8,62 +8,42 @@
 
     <div class="container cuerpo">
 
-        <div class="card mb-3">
-            <div class="row p-0">
-                <div class="col-md-4 d-flex align-items-center">
-                    <img src="https://http2.mlstatic.com/D_NQ_NP_951649-MLM47534407484_092021-O.webp"
-                        class="img-fluid rounded card-img-top" alt="...">
-                </div>
-                <div class="col-md-8 p-2">
-                    <div class="card-body">
-                        <h4 class="card-title">Katana Nichirin</h4>
-                        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
-                            facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
-                            quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
-                        <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
-                        <a href="#" class="btn btn-primary">Mayor información</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% if productos %}
 
-        <div class="card mb-3">
-            <div class="row p-0">
-                <div class="col-md-4 d-flex align-items-center">
-                    <img src="https://cdn9.ouedkniss.com/1600/medias/announcements/images/98BGvY/R98KS3MiiXXRImATtz4686KwtmVPPuozddOcerXG.jpg"
-                        class="img-fluid rounded card-img-top" alt="...">
-                </div>
-                <div class="col-md-8 p-2">
-                    <div class="card-body">
-                        <h4 class="card-title">Computadora gamer</h4>
-                        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
-                            facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
-                            quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
-                        <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
-                        <a href="#" class="btn btn-primary">Mayor información</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {% for producto in productos %}
 
-        <div class="card mb-3">
-            <div class="row p-0">
-                <div class="col-md-4 d-flex align-items-center">
-                    <img src="https://www.fangamer.com/cdn/shop/products/product_overhead_photo2.jpg?crop=center&height=600&v=1691803091&width=900"
-                        class="img-fluid rounded card-img-top" alt="...">
+                <div class="card mb-3">
+                    <div class="row p-0">
+                        <div class="col-md-4 d-flex align-items-center">
+                            <img src="{{ producto.imagen }}"
+                                class="img-fluid rounded card-img-top" alt="...">
+                        </div>
+                        <div class="col-md-8 p-2">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ producto.producto }}</h4>
+                                <p class="card-text">{{ producto.descripcion }}<p class="card-text"><small class="text-body-secondary">Mejor oferta: {{ producto.precio_inicial }}</small></p>
+                                <a href="{% url 'product' id=producto.id %}" class="btn btn-primary">Mayor información</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8 p-2">
-                    <div class="card-body">
-                        <h4 class="card-title">Computadora gamer</h4>
-                        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
-                            facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
-                            quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
-                        <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
-                        <a href="#" class="btn btn-primary">Mayor información</a>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="card mb-3 col-12">
+                <div class="row p-0">
+                    <div class="p-2">
+                        <div class="card-body d-flex nothing">
+                            <h4 class="mt-2">No hay subastas activas</h4>
+                            <a href="{% url 'new_product' %}" class="btn btn-primary">Subir producto</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+        {% endif %}
 
     </div>
 
