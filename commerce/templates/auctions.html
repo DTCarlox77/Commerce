@@ -1,146 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layouts/base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% block title %}Subastas{% endblock  %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-</head>
+{% block content %}
 
-<body>
+<div class="d-flex flex-grow-1 container mt-5 cuerpo">
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top p-4 border">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Commerce</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Productos</a>
-                    </li>
+    <div class="container cuerpo">
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Categorías
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Tecnología</a></li>
-                            <li><a class="dropdown-item" href="#">Hogar</a></li>
-                            <li><a class="dropdown-item" href="#">Ropa</a></li>
-                        </ul>
-                    </li>
-
-
-
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Productos" aria-label="Search">
-                    <button class="btn btn-light" type="submit">Buscar</button>
-                </form>
+        <div class="card mb-3">
+            <div class="row p-0">
+                <div class="col-md-4 d-flex align-items-center">
+                    <img src="https://http2.mlstatic.com/D_NQ_NP_951649-MLM47534407484_092021-O.webp"
+                        class="img-fluid rounded card-img-top" alt="...">
+                </div>
+                <div class="col-md-8 p-2">
+                    <div class="card-body">
+                        <h4 class="card-title">Katana Nichirin</h4>
+                        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
+                            facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
+                            quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
+                        <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
+                        <a href="#" class="btn btn-primary">Mayor información</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
 
-    <br>
-    <br>
-
-    <div class="d-flex flex-grow-1 container mt-5 cuerpo">
-
-        <div class="container cuerpo">
-
-            <div class="card mb-3">
-                <div class="row p-0">
-                    <div class="col-md-4 d-flex align-items-center">
-                        <img src="https://http2.mlstatic.com/D_NQ_NP_951649-MLM47534407484_092021-O.webp"
-                            class="img-fluid rounded card-img-top" alt="...">
-                    </div>
-                    <div class="col-md-8 p-2">
-                        <div class="card-body">
-                            <h4 class="card-title">Katana Nichirin</h4>
-                            <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
-                                facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
-                                quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
-                            <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
-                            <a href="#" class="btn btn-primary">Mayor información</a>
-                        </div>
+        <div class="card mb-3">
+            <div class="row p-0">
+                <div class="col-md-4 d-flex align-items-center">
+                    <img src="https://cdn9.ouedkniss.com/1600/medias/announcements/images/98BGvY/R98KS3MiiXXRImATtz4686KwtmVPPuozddOcerXG.jpg"
+                        class="img-fluid rounded card-img-top" alt="...">
+                </div>
+                <div class="col-md-8 p-2">
+                    <div class="card-body">
+                        <h4 class="card-title">Computadora gamer</h4>
+                        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
+                            facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
+                            quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
+                        <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
+                        <a href="#" class="btn btn-primary">Mayor información</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card mb-3">
-                <div class="row p-0">
-                    <div class="col-md-4 d-flex align-items-center">
-                        <img src="https://cdn9.ouedkniss.com/1600/medias/announcements/images/98BGvY/R98KS3MiiXXRImATtz4686KwtmVPPuozddOcerXG.jpg"
-                            class="img-fluid rounded card-img-top" alt="...">
-                    </div>
-                    <div class="col-md-8 p-2">
-                        <div class="card-body">
-                            <h4 class="card-title">Computadora gamer</h4>
-                            <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
-                                facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
-                                quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
-                            <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
-                            <a href="#" class="btn btn-primary">Mayor información</a>
-                        </div>
+        <div class="card mb-3">
+            <div class="row p-0">
+                <div class="col-md-4 d-flex align-items-center">
+                    <img src="https://www.fangamer.com/cdn/shop/products/product_overhead_photo2.jpg?crop=center&height=600&v=1691803091&width=900"
+                        class="img-fluid rounded card-img-top" alt="...">
+                </div>
+                <div class="col-md-8 p-2">
+                    <div class="card-body">
+                        <h4 class="card-title">Computadora gamer</h4>
+                        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
+                            facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
+                            quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
+                        <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
+                        <a href="#" class="btn btn-primary">Mayor información</a>
                     </div>
                 </div>
             </div>
-
-            <div class="card mb-3">
-                <div class="row p-0">
-                    <div class="col-md-4 d-flex align-items-center">
-                        <img src="https://www.fangamer.com/cdn/shop/products/product_overhead_photo2.jpg?crop=center&height=600&v=1691803091&width=900"
-                            class="img-fluid rounded card-img-top" alt="...">
-                    </div>
-                    <div class="col-md-8 p-2">
-                        <div class="card-body">
-                            <h4 class="card-title">Computadora gamer</h4>
-                            <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere,
-                                facilis vero. Consectetur, dolore blanditiis nulla quaerat, enim fuga, porro in iusto
-                                quis voluptatum libero doloremque facere minus obcaecati numquam quisquam.</p>
-                            <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ 50.00</small></p>
-                            <a href="#" class="btn btn-primary">Mayor información</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
     </div>
 
-    <br>
-    <br>
+</div>
 
-    <footer class="p-3 mt-5 border">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h3>Project 2: Commerce</h3>
-                    <p>Elaborado por Carlos Adrián Espinosa Luna (DTCarlox77). CS50W</p>
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <h5>Suígueme en mis redes</h5>
-                    <a target="_blank" href="https://github.com/DTCarlox77"
-                        class="text-black text-decoration-none">GitHub</a>
-                    <a target="_blank" href="https://www.youtube.com/channel/UCnUWCagaLT2qAK1Rl2VAfzQ"
-                        class="text-black text-decoration-none">YouTube</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-</body>
-
-</html>
+{% endblock %}

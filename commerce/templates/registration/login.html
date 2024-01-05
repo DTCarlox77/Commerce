@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Iniciar sesión{% endblock  %}
+
+{% block content %}
+
+<div class="container cuerpo">
+
+    <div class="card col-12">
+        <div class="card-body m-4">
+            <h4>Iniciar sesión</h4>
+            <br>
+
+            <form action="{% url 'login' %}" method="POST">
+
+                {% csrf_token %}
+                <h6 class="text-danger">Error: Usuario o contraseña incorrectos</h6>
+                <div class="row g-3 pb-2">
+                    <div class="col">
+                        <input name="username" type="text" class="form-control" placeholder="Nombre de usuario"
+                            aria-label="First name">
+                    </div>
+                </div>
+                <div class="row g-3 pb-2">
+                    <div class="col">
+                        <input name="password" type="password" class="form-control" placeholder="Contraseña"
+                            aria-label="First name">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary">Iniciar sesión</button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

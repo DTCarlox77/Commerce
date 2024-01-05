@@ -5,7 +5,6 @@ url_imagen = 'https://www.nbmchealth.com/wp-content/uploads/2018/04/default-plac
 prf_imagen = 'https://srcwap.com/wp-content/uploads/2022/08/abstract-user-flat-4.png'
 
 class CustomUser(AbstractUser):
-    imagen_perfil = models.CharField(max_length=256, default=prf_imagen)
 
     def __str__(self):
         return self.username
