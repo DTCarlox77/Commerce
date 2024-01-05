@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import logout, authenticate, login as auth_login
 from .models import CustomUser, Subasta, Oferta, Comentario, Watchlist
 from django.db import IntegrityError
+from django.db.models import Max
 
 # Create your views here.
 def main(request):
@@ -13,21 +14,21 @@ def main(request):
         'categorias' : categorias
     })
 
-# Muestra todos los productos disponibles para subastar.
+# Muestra todos los productos activos disponibles para subastar.
 def auctions(request):
-    productos = Subasta.objects.all().order_by('-fecha')
+    productos = Subasta.objects.filter(activo=True).order_by('-fecha')
     categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
     
     if request.method == 'POST':
         busqueda = request.POST.get('search')
-        print(busqueda)
         
         if busqueda:
             productos = Subasta.objects.filter(producto__icontains=busqueda).order_by('-fecha')
     
     return render(request, 'auctions.html', {
         'productos' : productos,
-        'categorias' : categorias
+        'categorias' : categorias,
+        'principal' : True,
     })
 
 # Retorna productos según su categoría.
@@ -60,17 +61,50 @@ def product(request, id):
     producto = get_object_or_404(Subasta, id=id)
     categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
     en_lista = False
-    comentarios = Comentario.objects.filter(producto=producto)
+    comentarios = Comentario.objects.filter(producto=producto).order_by('-fecha')
+    ofertas = Oferta.objects.filter(producto=producto)
+    ofertas_usuario = Oferta.objects.filter(producto=producto, usuario=request.user)
+    oferta_maxima = ofertas.aggregate(Max('oferta'))['oferta__max']
+    mensaje = None
     
     if request.user.is_authenticated:
         lista = Watchlist.objects.filter(usuario=request.user, producto=producto)
         en_lista = lista.exists()
-    
+        
+    if request.method == 'POST':
+        oferta = request.POST.get('oferta')
+        
+        try:
+            oferta = float(oferta)
+            
+            if oferta >= producto.precio_inicial and (not oferta_maxima or oferta > oferta_maxima):
+                try:
+                    nueva_oferta = Oferta(usuario=request.user, producto=producto, oferta=oferta)
+                    nueva_oferta.save()
+                    mensaje = ('Tu oferta se ha agregado exitosamente', 0)
+                    
+                    # Actualización de las variables de oferta.
+                    ofertas_usuario = Oferta.objects.filter(producto=producto, usuario=request.user)
+                    oferta_maxima = ofertas.aggregate(Max('oferta'))['oferta__max']
+                    
+                except:
+                    mensaje = ('No hemos podido almacenar tu oferta', 1)
+            else:
+                mensaje = ('Error: El precio a ofertar no es válido', 1)
+                        
+        except:
+            mensaje = ('Algo salió mal', 1)
+        
     return render(request, 'product.html', {
         'producto' : producto,
         'categorias' : categorias,
         'en_lista': en_lista,
-        'comentarios' : comentarios
+        'comentarios' : comentarios,
+        'ofertas' : ofertas,
+        'mensaje' : mensaje,
+        'cantidad_ofertas' : ofertas.count(),
+        'oferta_maxima' : oferta_maxima,
+        'oferta_maxima_usuario' : ofertas_usuario.aggregate(Max('oferta'))['oferta__max']
     })
 
 # Vista para el anexo de comentarios en un producto.
@@ -250,13 +284,14 @@ def watch_list(request):
 @login_required
 def close_auction(request, id):
     
-    return
-
-# Permite ofertar en la subasta.
-@login_required
-def bid(request, id):
+    producto = get_object_or_404(Subasta, id=id)
+    print(producto.vendedor)
     
-    return 
+    if request.user == producto.vendedor:
+        producto.activo = False
+        producto.save()
+
+    return redirect('product', id)
 
 # Cierra la sesión de usuario.
 @login_required

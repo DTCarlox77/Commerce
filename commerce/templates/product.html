@@ -16,13 +16,19 @@
                 <h5 class="card-title">{{ producto.producto }}</h5>
                 <p class="card-text">{{ producto.descripcion }}</p>
                 <p class="card-text"><small class="text-body">Ofrecido por: {{ producto.vendedor }}</small></p>
-                <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ {{ producto.precio_inicial }}</small></p>
+                <p class="card-text"><small class="text-body-secondary">Precio de venta: {{ producto.precio_inicial }}</small></p>
 
                 {% if user.is_authenticated %}
 
                     {% if user == producto.vendedor %}
+
+                        {% if producto.activo %}
+                            <a href="{% url 'close_auction' id=producto.id %}"><button class="btn btn-outline-danger">Cerrar subasta</button></a>
+
+                        {% else %}
+                            <h5 class="text">Has finalizado esta subasta</h5>
+                        {% endif %}
                         
-                        <a href="{% url 'close_auction' id=producto.id %}"><button class="btn btn-outline-danger">Cerrar subasta</button></a>
                         
                     {% else %}
 
@@ -30,6 +36,11 @@
                             <a href="{% url 'add_remove_list' id=producto.id %}"><button class="btn btn-outline-danger">Remover de la lista de seguimiento</button></a>
                         {% else %}
                             <a href="{% url 'add_remove_list' id=producto.id %}"><button class="btn btn-outline-primary">Agregar a lista de seguimiento</button></a>
+                        {% endif %}
+
+                        {% if not producto.activo %}
+                            <hr>
+                            <h6 class="text-danger mt-2">Esta subasta ha finalizado</h6>
                         {% endif %}
 
                     {% endif %}
@@ -47,19 +58,27 @@
                 <h4>Acciones</h4>
                 <br>
 
-                <p class="card-text text-primary">5 Usuarios han ofertado por este producto.</p>
+                <p class="card-text text-primary">{% if cantidad_ofertas > 0 %}{{ cantidad_ofertas }} Usuarios han ofertado por este producto.{% else %}Este producto no presenta ofertas.{% endif %}</p>
 
                 {% if user.is_authenticated %}
 
                     {% if user != producto.vendedor %}
 
-                        <form action="" method="POST">
+                        <form action="{% url 'product' id=producto.id %}" method="POST">
                             {% csrf_token %}
-                            <h6 class="text-danger">Su oferta no es válida</h6>
+
+                                {% if mensaje %}
+                                    {% if mensaje.1 == 0 %}
+                                        <h6 class="text-success">{{ mensaje.0 }}</h6>
+                                    {% else %}
+                                        <h6 class="text-danger">{{ mensaje.0 }}</h6>
+                                    {% endif %}
+                                {% endif %}
+                            
                             <div class="input-group">
-                                <input type="number" class="form-control"
+                                <input name="oferta" type="number" step="0.01" class="form-control"
                                     aria-label="Dollar amount (with dot and two decimal places)"
-                                    placeholder="Ingrese el monto a ofertar">
+                                    placeholder="Ingrese el monto a ofertar" required>
                                 <span class="input-group-text">$</span>
                             </div>
                             <br>
