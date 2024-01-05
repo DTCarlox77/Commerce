@@ -80,7 +80,7 @@
 
                 <!-- Formulario de búsquedas -->
 
-                <form class="d-flex" role="search" action="{% url 'search' %}">
+                <form class="d-flex" role="search" action="{% url 'auctions' %}" method='POST'>
                     {% csrf_token %}
                     <input name="search" class="form-control me-2" type="search" placeholder="Productos" aria-label="Search">
                     <button class="btn btn-light" type="submit">Buscar</button>

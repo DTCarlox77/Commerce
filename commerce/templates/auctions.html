@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}Subastas{% endblock  %}
+{% block title %}Commerce{% endblock  %}
 
 {% block content %}
 
@@ -9,6 +9,15 @@
     <div class="container cuerpo">
 
         {% if productos %}
+
+            {% if myproducts %}
+
+            <div class="container col-12">
+                <a href="{% url 'new_product' %}"><button class="btn btn-outline-primary col-12">Agregar nuevo producto</button></a>
+                <hr>
+            </div>
+
+            {% endif %}
 
             {% for producto in productos %}
 
@@ -32,6 +41,34 @@
 
         {% else %}
 
+            {% if watchlist %}
+
+            <div class="card mb-3 col-12">
+                <div class="row p-0">
+                    <div class="p-2">
+                        <div class="card-body d-flex nothing">
+                            <h4 class="mt-2">No hay productos en esta lista</h4>
+                            <a href="{% url 'auctions' %}" class="btn btn-primary">Buscar productos</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% elif myproducts %}
+
+            <div class="card mb-3 col-12">
+                <div class="row p-0">
+                    <div class="p-2">
+                        <div class="card-body d-flex nothing">
+                            <h4 class="mt-2">No posees productos en subasta</h4>
+                            <a href="{% url 'new_product' %}" class="btn btn-primary">Subir producto</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+
             <div class="card mb-3 col-12">
                 <div class="row p-0">
                     <div class="p-2">
@@ -42,6 +79,8 @@
                     </div>
                 </div>
             </div>
+
+            {% endif %}
 
         {% endif %}
 

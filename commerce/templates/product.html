@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}Título del producto{% endblock  %}
+{% block title %}{{ producto.producto }}{% endblock  %}
 
 {% block content %}
 
@@ -18,10 +18,22 @@
                 <p class="card-text"><small class="text-body">Ofrecido por: {{ producto.vendedor }}</small></p>
                 <p class="card-text"><small class="text-body-secondary">Mejor oferta: $ {{ producto.precio_inicial }}</small></p>
 
-                {% if user == producto.vendedor %}
-                    <button class="btn btn-outline-warning">Cerrar audición</button>
-                {% else %}
-                    <button class="btn btn-outline-primary">Agregar a lista de seguimiento</button>
+                {% if user.is_authenticated %}
+
+                    {% if user == producto.vendedor %}
+                        
+                        <a href="{% url 'close_auction' id=producto.id %}"><button class="btn btn-outline-danger">Cerrar subasta</button></a>
+                        
+                    {% else %}
+
+                        {% if en_lista %}
+                            <a href="{% url 'add_remove_list' id=producto.id %}"><button class="btn btn-outline-danger">Remover de la lista de seguimiento</button></a>
+                        {% else %}
+                            <a href="{% url 'add_remove_list' id=producto.id %}"><button class="btn btn-outline-primary">Agregar a lista de seguimiento</button></a>
+                        {% endif %}
+
+                    {% endif %}
+                
                 {% endif %}
             </div>
         </div>
@@ -35,23 +47,31 @@
                 <h4>Acciones</h4>
                 <br>
 
-                <p class="card-text text-primary">5 Usuarios han ofertado por este producto. Su oferta es la actual.
-                </p>
-                <p class="card-text"><small class="text-body-secondary">Su oferta: $ 1200.00</small></p>
+                <p class="card-text text-primary">5 Usuarios han ofertado por este producto.</p>
 
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <h6 class="text-danger">Su oferta no es válida</h6>
-                    <div class="input-group">
-                        <input type="number" class="form-control"
-                            aria-label="Dollar amount (with dot and two decimal places)"
-                            placeholder="Ingrese el monto a ofertar">
-                        <span class="input-group-text">$</span>
-                    </div>
-                    <br>
-    
-                    <button type="submit" class="btn btn-outline-primary">Ofertar</button>
-                </form>
+                {% if user.is_authenticated %}
+
+                    {% if user != producto.vendedor %}
+
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <h6 class="text-danger">Su oferta no es válida</h6>
+                            <div class="input-group">
+                                <input type="number" class="form-control"
+                                    aria-label="Dollar amount (with dot and two decimal places)"
+                                    placeholder="Ingrese el monto a ofertar">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <br>
+            
+                            <button type="submit" class="btn btn-outline-primary">Ofertar</button>
+
+                            <p class="card-text"><small class="text-body-secondary">Su oferta: $ 1200.00</small></p>
+                        </form>
+
+                    {% endif %}
+
+                {% endif %}
 
             </div>
         </div>
@@ -65,52 +85,44 @@
             <div class="card-body">
                 <h4>Sección de comentarios</h4>
                 <br>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <div class="form-floating">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                        <label for="floatingTextarea">Agrega un comentario</label>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-outline-primary">Agregar comentario</button>
-                </form>
-            </div>
 
+                {% if user.is_authenticated %}
+                    <form action="{% url 'comment' id=producto.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-floating">
+                            <textarea name="comentario" class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                            <label for="floatingTextarea">Agrega un comentario</label>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-outline-primary">Agregar comentario</button>
+                    </form>
+                {% endif %}
+            </div>
 
             <div class="card-body comentarios">
 
-                <div data-bs-spy="scroll" data-bs-offset="0" data-bs-smooth-scroll="true" class="scrollspy-example"
-                    tabindex="0">
-                    <h5 id="simple-list-item-1">Item 1</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, quas illo maxime dolores
-                        asperiores consectetur recusandae modi maiores accusamus quidem voluptatum quis excepturi
-                        nostrum expedita neque earum officiis repudiandae facilis?</p>
-                    <h6>6 de julio del 2023</h6>
-                </div>
+                {% if comentarios %}
 
-                <hr>
+                    {% for comentario in comentarios %}
 
-                <div data-bs-spy="scroll" data-bs-offset="0" data-bs-smooth-scroll="true" class="scrollspy-example"
-                    tabindex="0">
-                    <h5 id="simple-list-item-1">Item 1</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, quas illo maxime dolores
-                        asperiores consectetur recusandae modi maiores accusamus quidem voluptatum quis excepturi
-                        nostrum expedita neque earum officiis repudiandae facilis?</p>
-                    <h6>6 de julio del 2023</h6>
-                </div>
+                        <div data-bs-spy="scroll" data-bs-offset="0" data-bs-smooth-scroll="true" class="scrollspy-example">
+                            <h5 id="simple-list-item-1">{{ comentario.usuario }}</h5>
+                            <p>{{ comentario.comentario }}</p>
+                            <h6>{{ comentario.fecha }}</h6>
+                        </div>
 
-                <hr>
+                        <hr>
+
+                    {% endfor %}
+
+                {% else %}
 
                 <div data-bs-spy="scroll" data-bs-offset="0" data-bs-smooth-scroll="true" class="scrollspy-example"
                     tabindex="0">
-                    <h5 id="simple-list-item-1">Item 1</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, quas illo maxime dolores
-                        asperiores consectetur recusandae modi maiores accusamus quidem voluptatum quis excepturi
-                        nostrum expedita neque earum officiis repudiandae facilis?</p>
-                    <h6>6 de julio del 2023</h6>
+                    <h5 id="simple-list-item-1">Aún no hay comentarios</h5>
                 </div>
 
-                <hr>
+                {% endif %}
 
             </div>
         </div>

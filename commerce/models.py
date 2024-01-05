@@ -47,3 +47,10 @@ class Oferta(models.Model):
 
     def __str__(self):
         return f'{self.usuario} ha ofertado en {self.producto}'
+    
+class Watchlist(models.Model):
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Subasta, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.usuario} ha agregado {self.producto} a la lista de seguimiento'

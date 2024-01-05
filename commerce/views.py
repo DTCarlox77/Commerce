@@ -2,47 +2,148 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import logout, authenticate, login as auth_login
-from .models import CustomUser, Subasta, Oferta, Comentario
+from .models import CustomUser, Subasta, Oferta, Comentario, Watchlist
 from django.db import IntegrityError
 
 # Create your views here.
 def main(request):
-    
-    return render(request, 'index.html')
-
-def auctions(request):
-    
-    productos = Subasta.objects.all()
     categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
+    
+    return render(request, 'index.html', {
+        'categorias' : categorias
+    })
+
+# Muestra todos los productos disponibles para subastar.
+def auctions(request):
+    productos = Subasta.objects.all().order_by('-fecha')
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
+    
+    if request.method == 'POST':
+        busqueda = request.POST.get('search')
+        print(busqueda)
+        
+        if busqueda:
+            productos = Subasta.objects.filter(producto__icontains=busqueda).order_by('-fecha')
     
     return render(request, 'auctions.html', {
         'productos' : productos,
         'categorias' : categorias
     })
 
-def product(request, id):
+# Retorna productos según su categoría.
+def category(request, filtro):
+    productos = Subasta.objects.filter(categoria__icontains=filtro).order_by('-fecha')
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
+
+    return render(request, 'auctions.html', {
+        'productos': productos,
+        'categorias': categorias
+    })
+
+# Agrega o quita productos de la lista de seguimiento.
+def add_remove_list(request, id):
+    lista = Watchlist.objects.filter(usuario=request.user, producto=id)
+    producto = get_object_or_404(Subasta, id=id)
     
+    if lista.exists():
+        lista.delete()
+    
+    else:
+        if producto.vendedor != request.user:
+            agrega_lista = Watchlist(usuario=request.user, producto=producto)
+            agrega_lista.save()
+    
+    return redirect('product', id=id)
+
+# Muestra una interfaz de múltiples opciones para cada producto.
+def product(request, id):
     producto = get_object_or_404(Subasta, id=id)
     categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
+    en_lista = False
+    comentarios = Comentario.objects.filter(producto=producto)
+    
+    if request.user.is_authenticated:
+        lista = Watchlist.objects.filter(usuario=request.user, producto=producto)
+        en_lista = lista.exists()
     
     return render(request, 'product.html', {
         'producto' : producto,
-        'categorias' : categorias
+        'categorias' : categorias,
+        'en_lista': en_lista,
+        'comentarios' : comentarios
     })
 
+# Vista para el anexo de comentarios en un producto.
 @login_required
 def comment(request, id):
+    producto = get_object_or_404(Subasta, id=id)
     
-    return render(request, 'product.html')
+    if request.method == 'POST':
+        comentario = request.POST.get('comentario')
+        nuevo_comentario = Comentario(usuario=request.user, comentario=comentario, producto=producto)
+        nuevo_comentario.save()
+    
+    return redirect('product', id)
 
+# Formulario para agregar productos en la plataforma.
 @login_required
 def new_product(request):
+    # Cero retorna un sucess mientras que uno retorna incorrecto.
+    respaldo = dict()
+    mensaje = None
     
-    return render(request, 'new.html')
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
+    todas_categorias = Subasta.categorias
+    print(todas_categorias)
+    
+    if request.method == 'POST':
+        producto = request.POST.get('producto')
+        descripcion = request.POST.get('descripcion')
+        categoria = request.POST.get('categoria')
+        imagen = request.POST.get('imagen')
+        precio_inicial = request.POST.get('precio_inicial')
+        
+        respaldo = {
+            'producto' : producto,
+            'descripcion' : descripcion,
+            'categoria' : categoria,
+            'imagen' : imagen,
+            'precio_inicial' : precio_inicial
+        }
+        
+        # Convierte la cadena del formulario en un valor flotante.
+        try:
+            precio_inicial = float(precio_inicial)
+            
+        except:
+            precio_inicial = None
+        
+        if precio_inicial:
+            if precio_inicial <= 0 or precio_inicial > 1000000:
+                mensaje = ['El precio ingresado no es válido', 1]
+        
+        if not precio_inicial or not producto or not descripcion:
+            mensaje = ['Debes completar todos los campos', 1]
+            
+        try:
+            producto = Subasta(producto=producto, vendedor=request.user, descripcion=descripcion, categoria=categoria, imagen=imagen, precio_inicial=precio_inicial)
+            respaldo = None
+            mensaje = ['Producto agregado correctamente', 0]
+            producto.save()
+        
+        except IntegrityError as e:
+            mensaje = 'Algo salió mal :/'
+    
+    return render(request, 'new.html', {
+        'categorias' : categorias,
+        'todas_categorias' : todas_categorias,
+        'respaldo' : respaldo,
+        'mensaje' : mensaje
+    })
 
+# Inicio de sesión.
 @csrf_protect
 def login(request):
-    
     if request.user.is_authenticated:
         return redirect('main')
     
@@ -69,8 +170,8 @@ def login(request):
     
     return render(request, 'registration/login.html')
 
+# Registro de cuenta con validaciones.
 def sign_in(request):
-    
     if request.user.is_authenticated:
         return redirect('main')
     
@@ -120,20 +221,44 @@ def sign_in(request):
             
     return render(request, 'registration/sign_in.html')
 
+# Devuelve los objetos creados por el usuario.
 @login_required
 def user_products(request):
+    productos = Subasta.objects.filter(vendedor=request.user).order_by('-fecha')
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
     
-    return render(request, 'auctions.html')
+    return render(request, 'auctions.html', {
+        'productos' : productos,
+        'categorias' : categorias,
+        'myproducts' : True
+    })
 
+# Devuelve los objetos agregados a la lista de seguimiento.
 @login_required
 def watch_list(request):
+    # Obtiene los objetos de la lista de seguimiento.
+    productos = Subasta.objects.filter(watchlist__usuario=request.user).order_by('-fecha').distinct()
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
     
-    return render(request, 'auctions.html')
+    return render(request, 'auctions.html', {
+        'productos' : productos,
+        'categorias' : categorias,
+        'watchlist' : True
+    })
 
-def category(request, filtro):
+# Se encarga de finalizar una subasta activa.
+@login_required
+def close_auction(request, id):
     
-    return render(request, 'auctions.html')
+    return
 
+# Permite ofertar en la subasta.
+@login_required
+def bid(request, id):
+    
+    return 
+
+# Cierra la sesión de usuario.
 @login_required
 def close(request):
     
