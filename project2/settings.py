@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ul6t6*=339p6)o+)e9=7f(o6c9)a1j*0r+!mkzh(=o0uwn+!0$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'commerce-l7hq.onrender.com']
 
 
 # Application definition
@@ -48,6 +48,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost',
+    'https://commerce-l7hq.onrender.com'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'https://commerce-l7hq.onrender.com'
 ]
 
 ROOT_URLCONF = 'project2.urls'

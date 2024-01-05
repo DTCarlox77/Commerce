@@ -1,4 +1,4 @@
-# Proyecto "Commerce"
+# Project 2: Commerce
 
 ¡Bienvenido a Commerce! A continuación, encontrarás una descripción general del proyecto, una lista de los archivos incluidos y las instrucciones para ejecutar la aplicación en tu entorno local.
 
@@ -115,7 +115,24 @@ Bienvenido a Commerce, una plataforma de subastas que te permite crear, explorar
 
 ## Notas Adicionales
 
-- Asegúrate de tener la estructura de archivos de la aplicación según lo indicado en el README.
+- Asegúrate de tener los archivos de la aplicación con la siguiente jerarquía:
+   ```
+    - commerce
+        - migrations
+        - static
+            - css
+            - icons
+        - templates
+            - layouts
+            - registration
+
+    - project2
+
+    manage.py
+    .gitignore
+    requirements.txt
+    db.sqlite3
+   ```
 
 ¡Espero que disfrutes usando la aplicación de Commerce! Si tienes alguna pregunta o necesitas más información, no dudes en contactarme.
 
