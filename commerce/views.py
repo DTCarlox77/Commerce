@@ -76,6 +76,12 @@ def product(request, id):
         en_lista = lista.exists()
         oferta_maxima_usuario = ofertas_usuario.aggregate(Max('oferta'))['oferta__max']
         
+        if oferta_maxima_usuario:
+            oferta_maxima_usuario = round(oferta_maxima_usuario, 2)
+            
+        if oferta_maxima:
+            oferta_maxima = round(oferta_maxima, 2)
+        
     if request.method == 'POST':
         oferta = request.POST.get('oferta')
         
@@ -93,6 +99,9 @@ def product(request, id):
                     # Actualización de las variables de oferta.
                     ofertas_usuario = Oferta.objects.filter(producto=producto, usuario=request.user)
                     oferta_maxima = ofertas.aggregate(Max('oferta'))['oferta__max']
+                    oferta_maxima = round(oferta_maxima, 2)
+                    oferta_maxima_usuario = ofertas_usuario.aggregate(Max('oferta'))['oferta__max']
+                    oferta_maxima_usuario = round(oferta_maxima_usuario, 2)
                     
                 except:
                     mensaje = ('No hemos podido almacenar tu oferta', 1)
