@@ -64,13 +64,17 @@ def product(request, id):
     en_lista = False
     comentarios = Comentario.objects.filter(producto=producto).order_by('-fecha')
     ofertas = Oferta.objects.filter(producto=producto)
-    ofertas_usuario = Oferta.objects.filter(producto=producto, usuario=request.user)
-    oferta_maxima = ofertas.aggregate(Max('oferta'))['oferta__max']
+    ofertas_usuario = None
+    oferta_maxima = None
     mensaje = None
+    oferta_maxima_usuario = None
     
     if request.user.is_authenticated:
         lista = Watchlist.objects.filter(usuario=request.user, producto=producto)
+        ofertas_usuario = Oferta.objects.filter(producto=producto, usuario=request.user)
+        oferta_maxima = ofertas.aggregate(Max('oferta'))['oferta__max']
         en_lista = lista.exists()
+        oferta_maxima_usuario = ofertas_usuario.aggregate(Max('oferta'))['oferta__max']
         
     if request.method == 'POST':
         oferta = request.POST.get('oferta')
@@ -107,7 +111,7 @@ def product(request, id):
         'mensaje' : mensaje,
         'cantidad_ofertas' : ofertas.count(),
         'oferta_maxima' : oferta_maxima,
-        'oferta_maxima_usuario' : ofertas_usuario.aggregate(Max('oferta'))['oferta__max']
+        'oferta_maxima_usuario' : oferta_maxima_usuario
     })
 
 # Vista para el anexo de comentarios en un producto.
