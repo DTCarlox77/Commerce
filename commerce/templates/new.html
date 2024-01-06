@@ -34,7 +34,7 @@
                 <div class="col-auto pb-2">
                     <label name="categoria" class="visually-hidden" for="autoSizingSelect">Preference</label>
                     <select class="form-select" id="autoSizingSelect" name="categoria">
-                        <option selected value="{% if respaldo.categoria %}{{ respaldo.categoria }}{% endif %}">{% if respaldo.categoria %}{{ respaldo.categoria }}{% else %}Categoría{% endif %}</option>
+                        <option selected value="{% if respaldo.categoria %}{{ respaldo.categoria }}{% else %}Sin especificar{% endif %}">{% if respaldo.categoria %}{{ respaldo.categoria }}{% else %}Sin especificar{% endif %}</option>
                         {% for categoria_producto, _ in todas_categorias %}
                             <option value="{{ categoria_producto }}">{{ categoria_producto }}</option>
                         {% endfor %}

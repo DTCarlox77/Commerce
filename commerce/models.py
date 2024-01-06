@@ -9,6 +9,7 @@ class CustomUser(AbstractUser):
 
 class Subasta(models.Model):
     categorias = [
+        ('Sin especificar', 'Sin especificar'),
         ('Juguetes', 'Juguetes'),
         ('Ropa', 'Ropa'),
         ('Electrónica', 'Electrónica'),

@@ -155,6 +155,9 @@ def new_product(request):
         
         if not imagen:
             imagen = 'https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png'
+            
+        if not categoria:
+            categoria = 'Sin especificar'
         
         respaldo = {
             'producto' : producto,
