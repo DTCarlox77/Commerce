@@ -226,9 +226,12 @@ def login(request):
     return render(request, 'registration/login.html')
 
 # Registro de cuenta con validaciones.
+@csrf_protect
 def sign_in(request):
     if request.user.is_authenticated:
         return redirect('main')
+    
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
     
     if request.method == 'POST':
         # Validación de los datos del formulario.
@@ -238,24 +241,28 @@ def sign_in(request):
         respaldo = {
             'username': username,
             'password': password,
+            'categorias' : categorias
         }
 
         if not username or not password:
             return render(request, 'registration/sign_in.html', {
                 'mensaje': 'Completa todos los campos para registrarte',
-                'respaldo': respaldo
+                'respaldo': respaldo,
+                'categorias' : categorias
             })
     
         if not username.isalnum():
             return render(request, 'registration/sign_in.html', {
                 'mensaje': 'El nombre de usuario no puede contener caracteres especiales',
-                'respaldo': respaldo
+                'respaldo': respaldo,
+                'categorias' : categorias
             })
         
         if len(password) < 5:
             return render(request, 'registration/sign_in.html', {
                 'mensaje': 'La contraseña ingresada es muy corta',
-                'respaldo': respaldo
+                'respaldo': respaldo,
+                'categorias' : categorias
             })
             
         try:
@@ -266,15 +273,19 @@ def sign_in(request):
             if 'UNIQUE constraint' in str(e):
                 return render(request, 'registration/sign_in.html', {
                     'mensaje': 'El nombre de usuario ya está en uso. Por favor, elige otro.',
-                    'respaldo': respaldo
+                    'respaldo': respaldo,
+                    'categorias' : categorias
                 })
             else:
                 return render(request, 'registration/sign_in.html', {
                     'mensaje': f'Error de registro: {e}',
-                    'respaldo': respaldo
+                    'respaldo': respaldo,
+                    'categorias' : categorias
                 })
             
-    return render(request, 'registration/sign_in.html')
+    return render(request, 'registration/sign_in.html', {
+        'categorias' : categorias
+    })
 
 # Devuelve los objetos creados por el usuario.
 @login_required
