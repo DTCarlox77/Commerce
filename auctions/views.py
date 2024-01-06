@@ -202,6 +202,8 @@ def login(request):
     if request.user.is_authenticated:
         return redirect('main')
     
+    categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
+    
     if request.method == 'POST':
         # Validación de los datos del formulario.
         username = request.POST.get('username')
@@ -221,9 +223,14 @@ def login(request):
             return redirect('auctions')
         
         else:
-            return render(request, 'registration/login.html', {'mensaje': 'Credenciales incorrectas. Por favor, inténtalo de nuevo.'})
+            return render(request, 'registration/login.html', {
+                'mensaje': 'Credenciales incorrectas. Por favor, inténtalo de nuevo.',
+                'categorias' : categorias
+            })
     
-    return render(request, 'registration/login.html')
+    return render(request, 'registration/login.html', {
+        'categorias' : categorias
+    })
 
 # Registro de cuenta con validaciones.
 @csrf_protect
