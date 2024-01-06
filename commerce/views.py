@@ -144,7 +144,6 @@ def new_product(request):
     
     categorias = Subasta.objects.values_list('categoria', flat=True).distinct()
     todas_categorias = Subasta.categorias
-    print(todas_categorias)
     
     if request.method == 'POST':
         producto = request.POST.get('producto')
@@ -307,7 +306,6 @@ def watch_list(request):
 def close_auction(request, id):
     
     producto = get_object_or_404(Subasta, id=id)
-    print(producto.vendedor)
     
     if request.user == producto.vendedor:
         producto.activo = False
