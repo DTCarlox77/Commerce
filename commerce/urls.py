@@ -1,20 +1,23 @@
+"""
+URL configuration for commerce project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.0/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
 from django.contrib import admin
-from django.urls import path
-from .views import *
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main, name='main'),
-    path('auctions/', auctions, name='auctions'),
-    path('new_product/', new_product, name='new_product'),
-    path('product/<int:id>', product, name='product'),
-    path('products/', user_products, name='user_products'),
-    path('watch_list/', watch_list, name='watch_list'),
-    path('add_remove_list/<int:id>', add_remove_list, name='add_remove_list'),
-    path('close_auction/<int:id>', close_auction, name='close_auction'),
-    path('category/<str:filtro>', category, name='category'),
-    path('comment/<int:id>', comment, name='comment'),
-    path('login/', login, name='login'),
-    path('sign_in/', sign_in, name='sign_in'),
-    path('close/', close, name='close')
+    path('', include('auctions.urls'))
 ]
