@@ -4,8 +4,8 @@ from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main, name='main'),
-    path('auctions/', auctions, name='auctions'),
+    path('commerce/', main, name='main'),
+    path('', auctions, name='auctions'),
     path('new_product/', new_product, name='new_product'),
     path('product/<int:id>', product, name='product'),
     path('products/', user_products, name='user_products'),
