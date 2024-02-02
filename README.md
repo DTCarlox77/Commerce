@@ -65,6 +65,10 @@ Bienvenido a Commerce, una plataforma de subastas que te permite crear, explorar
 
 6. **Interfaz de Administración:** Los administradores pueden gestionar listados, ofertas, comentarios y categorías a través de la interfaz de administración de Django.
 
+## Video tutorial
+
+   **Youtube**: [https://youtu.be/j85BdENs898?si=KDA7LTmlctu6Kkey](https://youtu.be/kFv_-Uy0Kvg?si=Zvf12nVdOCFrYNgM)
+
 ## Estructura de Archivos de la Aplicación
 
 - **commerce/:** Esta carpeta alberga el proyecto principal de Django, configurado como un módulo. La ejecución se realiza desde la ruta raíz a través del archivo `manage.py`.
